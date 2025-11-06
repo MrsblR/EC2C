@@ -53,3 +53,4 @@ Thumbs.db
 .expo
 .expo-shared
 .vercel
+gke_gcloud_auth_plugin_cache

@@ -4,54 +4,100 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todos App</title>
-    <style>
-      body { font-family: Arial, sans-serif; margin: 2rem; }
-      h1 { margin-bottom: 0.5rem; }
-      form { margin: 1rem 0; }
-      input[type=text] { padding: 0.5rem; width: 300px; }
-      button { padding: 0.5rem 1rem; }
-      li { margin-bottom: 0.25rem; }
-      .status { color: #666; font-size: 0.9rem; }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <h1>Todos</h1>
-    <div class="status" id="status">Cargando...</div>
-    <form id="form">
-      <input id="title" type="text" placeholder="Nueva tarea" />
-      <button type="submit">Agregar</button>
-    </form>
-    <ul id="list"></ul>
+  <body class="bg-slate-50 text-slate-800">
+    <div class="min-h-screen flex items-center justify-center p-6">
+      <div class="w-full max-w-2xl">
+        <div class="mb-6 text-center">
+          <h1 class="text-3xl font-bold">Todos</h1>
+          <p id="status" class="text-sm text-slate-500 mt-1">Cargando...</p>
+        </div>
+
+        <div class="bg-white shadow-sm rounded-xl border border-slate-200 p-5">
+          <form id="form" class="flex gap-3 items-center">
+            <input
+              id="title"
+              type="text"
+              placeholder="Nueva tarea"
+              class="flex-1 rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+            <button
+              type="submit"
+              class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 text-white px-4 py-2 font-medium hover:bg-indigo-700 active:bg-indigo-800 transition"
+            >
+              Agregar
+            </button>
+          </form>
+
+          <ul id="list" class="mt-5 divide-y divide-slate-200"></ul>
+        </div>
+      </div>
+    </div>
+
+    <template id="itemTpl">
+      <li class="py-3 flex items-start justify-between">
+        <div class="flex items-start gap-3">
+          <div class="mt-1">
+            <span class="inline-flex h-2.5 w-2.5 rounded-full bg-slate-300" data-done-indicator></span>
+          </div>
+          <div>
+            <p class="font-medium text-slate-800" data-title></p>
+            <p class="text-xs text-slate-400" data-meta></p>
+          </div>
+        </div>
+      </li>
+    </template>
 
     <script>
+      const $status = document.getElementById('status');
+      const $list = document.getElementById('list');
+      const $tpl = document.getElementById('itemTpl');
+
+      function render(items) {
+        $list.innerHTML = '';
+        if (!items.length) {
+          $list.innerHTML = '<li class="py-6 text-center text-slate-400">Sin tareas por ahora</li>';
+          return;
+        }
+        for (const t of items) {
+          const node = $tpl.content.cloneNode(true);
+          node.querySelector('[data-title]').textContent = t.title;
+          node.querySelector('[data-meta]').textContent = `#${t.id} · ${t.done ? 'completado' : 'pendiente'}`;
+          const ind = node.querySelector('[data-done-indicator]');
+          ind.classList.remove('bg-slate-300');
+          ind.classList.add(t.done ? 'bg-emerald-500' : 'bg-amber-400');
+          $list.appendChild(node);
+        }
+      }
+
       async function fetchTodos() {
         try {
           const res = await fetch('/api/todos');
           const data = await res.json();
-          const list = document.getElementById('list');
-          list.innerHTML = '';
-          data.forEach(t => {
-            const li = document.createElement('li');
-            li.textContent = `#${t.id} - ${t.title} [${t.done ? 'X' : ' '}]`;
-            list.appendChild(li);
-          });
-          document.getElementById('status').textContent = 'Listo';
+          render(data);
+          $status.textContent = 'Listo';
         } catch (e) {
-          document.getElementById('status').textContent = 'Error cargando';
+          $status.textContent = 'Error cargando';
         }
       }
 
       document.getElementById('form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const title = document.getElementById('title').value.trim();
+        const input = document.getElementById('title');
+        const title = input.value.trim();
         if (!title) return;
-        await fetch('/api/todos', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title })
-        });
-        document.getElementById('title').value = '';
-        fetchTodos();
+        try {
+          await fetch('/api/todos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title })
+          });
+          input.value = '';
+          fetchTodos();
+        } catch (e) {
+          $status.textContent = 'Error al guardar';
+        }
       });
 
       fetchTodos();
