@@ -73,10 +73,7 @@ Notas GCP
    - Con Ingress NGINX: http://app.localtest.me/
    - Si el Ingress aún no está listo, usar `kubectl port-forward svc/frontend -n app 8080:80` y abrir http://localhost:8080/
 
-Notas operativas
-- HPA requiere metrics-server. El script de kind lo instala. En Docker Desktop suele venir habilitado o puedes instalarlo con `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`.
-- Persistencia: se define PV hostPath para entorno local (no gastar $$$). En nube pública se recomienda StorageClass dinámico.
-- Alta disponibilidad real de DB en local es compleja. Para no incurrir costo se entrega PostgreSQL único con PVC (SPOF). En producción, usaría Cloud SQL/AlloyDB o un operador (p. ej. Crunchy/Bitnami) con réplicas.
+
 
 Justificación de herramientas
 - Kubernetes: orquestación, despliegue declarativo, rolling updates, HPA, Service/Ingress, probes, PDB — facilita escalabilidad y tolerancia a fallos.
@@ -92,9 +89,4 @@ Escalabilidad y HA
 - `NetworkPolicy` restringe acceso a DB solo desde `backend`.
 
 Pruebas
-- Backend con Jest+supertest: prueba de `/api/health` y flujo básico de todos con mock del cliente `pg`.
-
-Comandos útiles
-- Ver pods: `kubectl get pods -n app -o wide`
-- Logs backend: `kubectl logs -n app deploy/backend`
-- Probar API: `kubectl port-forward -n app svc/backend 3000:3000` y `curl http://localhost:3000/api/health`
+- Backend con Jest+supertest: prueba de `/api/health` 

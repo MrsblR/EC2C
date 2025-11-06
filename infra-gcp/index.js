@@ -168,7 +168,7 @@ const backend = new k8s.apps.v1.Deployment('backend', {
         containers: [{
           name: 'backend',
           image: imageBackend,
-          imagePullPolicy: 'IfNotPresent',
+          imagePullPolicy: 'Always',
           ports: [{ containerPort: 3000 }],
           env: [
             { name: 'DATABASE_URL', value: pulumi.interpolate`postgres://${dbUser}:${dbPass}@${dbSvc.metadata.name}.${ns.metadata.name}.svc.cluster.local:5432/${dbName}` },
@@ -203,7 +203,7 @@ const frontend = new k8s.apps.v1.Deployment('frontend', {
         containers: [{
           name: 'frontend',
           image: imageFrontend,
-          imagePullPolicy: 'IfNotPresent',
+          imagePullPolicy: 'Always',
           ports: [{ containerPort: 80 }],
           resources: { requests: { cpu: '50m', memory: '64Mi' }, limits: { cpu: '300m', memory: '256Mi' } },
           readinessProbe: { httpGet: { path: '/', port: 80 }, initialDelaySeconds: 5, periodSeconds: 10 },
