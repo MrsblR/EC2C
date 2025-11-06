@@ -1,0 +1,7 @@
+encryptionsalt: v1:Mr9+nqkJf50=:v1:f5FmXRkBYL4f3oTU:8rPO3gJmMkjnba9YB3F2i9FixRnxCg==
+config:
+  gcp:project: autoscaling-lab-476403
+  gcp:region: us-central1
+  k8s-three-tier-app-gcp:location: us-central1
+  k8s-three-tier-app-gcp:clusterName: demo-autopilot
+  k8s-three-tier-app-gcp:repoId: apps

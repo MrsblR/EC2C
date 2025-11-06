@@ -1,0 +1,4 @@
+name: k8s-three-tier-app-gcp
+runtime: nodejs
+description: Full IaC on GCP (GKE Autopilot + K8s resources) with Pulumi
+

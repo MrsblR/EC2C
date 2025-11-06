@@ -1,0 +1,55 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*.local
+.env.local
+
+# Build / output
+dist/
+build/
+out/
+public/build/
+.tmp/
+.cache/
+.parcel-cache/
+
+# Frameworks
+.next/
+.nuxt/
+out/
+.cache/            # Gatsby, etc.
+.serverless/
+
+# Coverage
+coverage/
+*.lcov
+coverage-final.json
+
+# Logs & runtime files
+logs/
+*.log
+pids/
+*.pid
+*.seed
+
+# Editor / OS files
+.idea/
+.vscode/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Optional caches
+.npm
+.expo
+.expo-shared
+.vercel

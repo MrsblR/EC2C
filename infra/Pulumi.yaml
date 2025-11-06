@@ -1,0 +1,4 @@
+name: k8s-three-tier-app
+runtime: nodejs
+description: Three-tier app (frontend, backend, db) on Kubernetes with Pulumi
+

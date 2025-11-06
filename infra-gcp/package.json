@@ -1,0 +1,12 @@
+{
+  "name": "infra-gcp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@pulumi/gcp": "^7.23.0",
+    "@pulumi/kubernetes": "^4.12.1",
+    "@pulumi/pulumi": "^3.134.0"
+  }
+}
+
